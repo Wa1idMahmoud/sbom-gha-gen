@@ -1,24 +1,41 @@
-name: Generate, Artifact SBOM.
+name: Generate, Artifact SBOM
 
-on: 
+on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
+    inputs:
+      repository-url:
+        description: 'Optional: The URL of the repository to generate SBOM for (e.g., https://github.com/Wa1idMahmoud/sbom-gha-gen)'
+        required: false
+        default: ''
 
 jobs:
   build:
-
     runs-on: self-hosted
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.inputs.repository-url || github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
 
-    - name: Build
-      run: dotnet build Sample.sln --output buildOutput
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
-      with:
-        path: buildOutput
+      - name: Install Syft
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Generate SBOM
+        run: |
+          syft packages dir:. -o cyclonedx-json=sbom.json
+
+      - name: Upload SBOM as an Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: sbom-artifact
+          path: sbom.json
