@@ -32,9 +32,3 @@ jobs:
 
       - name: Upload SBOM as an Artifact
         uses: actions/upload-artifact@v4.3.0
-        with:
-          path: ./*
-
-
-
-
