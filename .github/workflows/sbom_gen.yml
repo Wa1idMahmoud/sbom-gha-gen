@@ -21,10 +21,9 @@ jobs:
           repository: ${{ github.event.inputs.repository-url || github.repository }}
           token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
+      - name: setup-dotnet
+        uses: xt0rted/setup-dotnet@v1.5.0
+            
 
       - name: Anchore SBOM Action
         uses: anchore/sbom-action@v0.15.8
