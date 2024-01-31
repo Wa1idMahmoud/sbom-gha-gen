@@ -33,6 +33,9 @@ jobs:
           # Optionally, you can specify output file, format, etc.
           path: "." # Scans the root directory of the repository
 
+      - name: List files in root directory
+        run: ls -l
+
       - name: Upload SBOM as an Artifact
         uses: actions/upload-artifact@v4
         with:
