@@ -20,9 +20,12 @@ jobs:
         with:
           repository: ${{ github.event.inputs.repository-url || github.repository }}
           token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-      - name: setup-dotnet
-        uses: xt0rted/setup-dotnet@v1.5.0
             
 
       - name: Anchore SBOM Action
