@@ -16,13 +16,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ${{ github.event.inputs.repository-url || github.repository }}
           token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
 
@@ -33,7 +33,7 @@ jobs:
           path: "." # Scans the root directory of the repository
 
       - name: Upload SBOM as an Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sbom-artifact
           path: sbom-gha-gen-sbom.spdx.json
