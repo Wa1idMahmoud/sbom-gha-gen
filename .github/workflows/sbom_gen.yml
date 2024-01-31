@@ -11,7 +11,7 @@ on:
         default: ''
 
 jobs:
-  build:
+  sbom:
     runs-on: self-hosted
 
     steps:
@@ -26,16 +26,14 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-      - name: Install Syft
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-
-      - name: Generate SBOM
-        run: |
-          syft packages dir:. -o cyclonedx-json=sbom.json
+      - name: Anchore SBOM Action
+        uses: anchore/sbom-action@v0.15.8
+        with:
+          # Optionally, you can specify output file, format, etc.
+          path: "." # Scans the root directory of the repository
 
       - name: Upload SBOM as an Artifact
         uses: actions/upload-artifact@v3.1.0
         with:
           name: sbom-artifact
-          path: sbom.json
+          path: anchore.sbom* # Adjust this pattern based on how anchore names the output SBOM file
