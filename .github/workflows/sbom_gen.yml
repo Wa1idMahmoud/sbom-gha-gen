@@ -23,9 +23,6 @@ jobs:
       
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.1
-            
-
-            
 
       - name: Anchore SBOM Action
         uses: anchore/sbom-action@v0.15.8
