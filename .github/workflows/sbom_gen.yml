@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sbom-artifact
-          path: sbom-gha-gen-sbom.spdx.json
+          path: ./sbom-gha-gen-sbom.spdx.json
 
 
 
