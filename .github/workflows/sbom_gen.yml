@@ -1,28 +1,24 @@
-name: Generate SBOM
+name: Generate, Artifact SBOM.
 
-on:
-  push:
-    branches: [ main ]
+on: 
   workflow_dispatch:
 
 jobs:
-  sbom:
+  build:
+
     runs-on: self-hosted
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Install Syft
-      run: |
-        curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-
-    - name: Generate SBOM
-      run: |
-        syft packages dir:/path/to/project -o cyclonedx-json=sbom.json
-
-    - name: Upload SBOM as an Artifact
-      uses: actions/upload-artifact@v3
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
       with:
-        name: sbom-artifact
-        path: sbom.json
+        dotnet-version: 6.0.x
+
+    - name: Build
+      run: dotnet build Sample.sln --output buildOutput
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        path: buildOutput
