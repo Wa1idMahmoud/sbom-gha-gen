@@ -9,21 +9,17 @@ on:
         description: "Optional: The URL of the repository to generate SBOM for (e.g., 'https://github.com/Wa1idMahmoud/sbom-gha-gen')"
         required: false
         default: ""
-      branch:
-        description: "The branch to checkout (defaults to main)"
-        required: false
-        default: "main"
 
 jobs:
   generate-sbom:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.inputs.repository-url }}
-          ref: ${{ github.event.inputs.branch }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.event.inputs.repository-url || github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
 
       - name: Install Syft
         run: curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
@@ -32,7 +28,7 @@ jobs:
         run: syft packages dir:. -o cyclonedx-json=./sbom.json
 
       - name: Upload SBOM as Artefact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4.3.0
         with:
           name: sbom
           path: ./sbom.json
