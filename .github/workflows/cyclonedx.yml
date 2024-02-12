@@ -6,9 +6,13 @@ on:
   workflow_dispatch:
     inputs:
       repository-url:
-        description: "Optional: The URL of the repository to generate SBOM for (e.g., https://github.com/Wa1idMahmoud/sbom-gha-gen)"
+        description: "Optional: The URL of the repository to generate SBOM for (e.g., 'https://github.com/Wa1idMahmoud/sbom-gha-gen')"
         required: false
         default: ""
+      branch:
+        description: "The branch to checkout (defaults to main)"
+        required: false
+        default: "main"
 
 jobs:
   generate-sbom:
@@ -16,6 +20,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.inputs.repository-url }}
+          ref: ${{ github.event.inputs.branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Syft
         run: curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
