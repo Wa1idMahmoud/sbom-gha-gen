@@ -1,6 +1,14 @@
 name: Generate CycloneDX SBOM
 
-on: [push]
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      repository-url:
+        description: "Optional: The URL of the repository to generate SBOM for (e.g., https://github.com/Wa1idMahmoud/sbom-gha-gen)"
+        required: false
+        default: ""
 
 jobs:
   generate-sbom:
