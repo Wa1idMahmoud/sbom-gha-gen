@@ -1,0 +1,22 @@
+name: Generate CycloneDX SBOM
+
+on: [push]
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Syft
+        run: curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Generate SBOM
+        run: syft packages dir:. -o cyclonedx-json=./sbom.json
+
+      - name: Upload SBOM as Artefact
+        uses: actions/upload-artifact@v2
+        with:
+          name: sbom
+          path: ./sbom.json

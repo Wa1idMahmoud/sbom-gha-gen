@@ -1,34 +1,34 @@
-name: Generate, Artifact SBOM
+# name: Generate, Artifact SBOM
 
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-    inputs:
-      repository-url:
-        description: 'Optional: The URL of the repository to generate SBOM for (e.g., https://github.com/Wa1idMahmoud/sbom-gha-gen)'
-        required: false
-        default: ''
+# on:
+#   push:
+#     branches: [ main ]
+#   workflow_dispatch:
+#     inputs:
+#       repository-url:
+#         description: 'Optional: The URL of the repository to generate SBOM for (e.g., https://github.com/Wa1idMahmoud/sbom-gha-gen)'
+#         required: false
+#         default: ''
 
-jobs:
-  sbom:
-    runs-on: self-hosted
+# jobs:
+#   sbom:
+#     runs-on: self-hosted
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.inputs.repository-url || github.repository }}
-          token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#         with:
+#           repository: ${{ github.event.inputs.repository-url || github.repository }}
+#           token: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4.0.1
+#       - name: Setup Node.js environment
+#         uses: actions/setup-node@v4.0.1
 
-      - name: Anchore SBOM Action
-        uses: anchore/sbom-action@v0.15.8
+#       - name: Anchore SBOM Action
+#         uses: anchore/sbom-action@v0.15.8
 
-      - name: Upload SBOM as an Artifact
-        uses: actions/upload-artifact@v4.3.0
-        with:
-          name: sbom-artifact
-          path: "*"
+#       - name: Upload SBOM as an Artifact
+#         uses: actions/upload-artifact@v4.3.0
+#         with:
+#           name: sbom-artifact
+#           path: "*"
