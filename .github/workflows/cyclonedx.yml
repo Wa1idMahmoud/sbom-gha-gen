@@ -25,19 +25,20 @@ jobs:
         run: curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
       - name: Generate SBOM
-        run: syft packages dir:. -o cyclonedx-json=./sbom.json
+        run: syft packages dir:. -o cyclonedx-xml=./sbom.xml
 
       - name: Upload SBOM as Artefact
         uses: actions/upload-artifact@v4.3.0
         with:
           name: sbom
-          path: ./sbom.json
+          path: ./sbom.xml
 
-      - name: Upload SBOM to Dependency-Track
-        # trunk-ignore(actionlint/syntax-check)
-        uses: DependencyTrack/gh-upload-sbom@v3.0.0
-        with:
-          serverHostname: "http://localhost:8080"
-          apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
-          project: "CTP-Team"
-          bomFilename: sbom.json
+    #   - name: Upload SBOM to Dependency-Track
+    #     uses: DependencyTrack/gh-upload-sbom@v3.0.0
+    #     with:
+    #       serverHostname: "http://localhost:8080"
+    #       apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
+    #       project: "CTP-Team"
+    #       port: 443
+    #       protocol: https
+    #       bomFilename: sbom.json
