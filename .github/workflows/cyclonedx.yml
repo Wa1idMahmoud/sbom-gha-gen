@@ -34,8 +34,10 @@ jobs:
           path: ./sbom.json
 
       - name: Upload SBOM to Dependency-Track
-        uses: DependencyTrack/gh-upload-sbom@v2.0.0
+        # trunk-ignore(actionlint/syntax-check)
+        uses: DependencyTrack/gh-upload-sbom@v3.0.0
         with:
           serverHostname: "http://localhost:8080"
           apiKey: ${{ secrets.DEPENDENCYTRACK_APIKEY }}
           project: "CTP-Team"
+          bomFilename: sbom.json
